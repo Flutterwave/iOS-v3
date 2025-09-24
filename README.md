@@ -142,6 +142,7 @@ let launchButton = UIButton(type: .system)
    config.publicKey = "[PUB_KEY]" //Public key
    config.encryptionKey = "[ENCRYPTION_KEY]" //Encryption key
    config.isPreAuth = false  // This should be set to true for preauthorize card transactions
+   config.allowSaveCard = true //This should display the `RememberCard` component. false hides the component
    let controller = FlutterwavePayViewController()
    let nav = UINavigationController(rootViewController: controller)
    controller.amount = "[]" // This is the amount to be charged.
