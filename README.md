@@ -10,7 +10,7 @@
 
 ## Introduction
 
-The Flutterwave iOS SDK simplifies and accelerates the process of integrating Flutterwave's payment services into your iOS applications.
+The Flutterwave iOS SDK streamlines and speeds up the integration of Flutterwave's payment services into your iOS applications.
 
 ## Table of Contents
 
@@ -35,72 +35,65 @@ The Flutterwave iOS SDK simplifies and accelerates the process of integrating Fl
 
 ## Requirements
 
-To use the Flutterwave iOS SDK, you need the following:
+To use the Flutterwave iOS SDK, you must have the following:
 
-- iOS version 11.0 or later
-- Swift version 5.3 or later
-- CocoaPods or Carthage for dependency management
+- iOS version 11.0 or newer.
+- Swift version 5.3 or newer.
+- CocoaPods or Carthage for managing dependency.
 
 ## Installation
 
-To install the Flutterwave iOS SDK, you can use either CocoaPods or Carthage:
+To install the Flutterwave iOS SDK, you have two options: you can use either CocoaPods or Carthage.
 
 - **CocoaPods**:
     1. Add the following line to your `Podfile`:
        ```
        pod 'FlutterwaveSDK'
        ```
-    2. Run `pod install` in your terminal.
+    2. In your terminal run the command:
+       ```
+       pod install
+       ```
 
 - **Carthage**:
     1. Add the following line to your `Cartfile`:
        ```
        github "Flutterwave/iOS-v3"
        ```
-    2. Run `carthage update` and follow the integration steps.
+    2. Run the command :
+        ```
+        `carthage update` 
+        ```
+       Then, follow the integration steps.
 
-1. Run the following command in your terminal:
-```
-pod install
-```
 
-# Carthage
-
-1. Add the following line to your Cartfile:
-``` 
-"github Flutterwave/iOS-v3"
-```
-2. Run the following command in your terminal:
-```
-carthage update
-```
 
 ## Initialization or Instantiation
 
-Before using the SDK, you need to initialize it with your API keys. Here's how you can do it:
+To use the SDK, you must first initialize it with your API keys. Here's how to do that:
 
 ```swift
 import FlutterwaveSDK
 
-config.publicKey = "[PUB_KEY]" //Public key
-config.encryptionKey = "[ENCRYPTION_KEY]" //Encryption key
+config.publicKey = "[PUB_KEY]" //Your Public Key.
+config.encryptionKey = "[ENCRYPTION_KEY]" //Your Encryption Key.
 ```
 ## Usage
 
-The SDK offers the following features:
+The SDK provides the following features:
 
 ### Collections: 
 Support for various payment methods including Cards, Accounts, Mobile Money, Bank Transfers, USSD, and Barter.
 
 ### Recurring Payments: 
-Tokenization and Subscription capabilities are also provided.
+Tokenization and Subscription functionalities are also provided.
 
 # Use Case
-Consider a scenario where you have an e-commerce app. You can use the Flutterwave iOS SDK to handle the checkout process efficiently.
+Imagine you have an e-commerce app. You can utilize the Flutterwave iOS SDK to manage the checkout process efficiently.
 
 # Flow
-Collect payment details from the user.
-Initialize the Flutterwave SDK with the necessary parameters.
+Collect payment details from the customer.
+Initialize the Flutterwave SDK with the required parameters.
 Process the payment using various payment methods such as cards, mobile money, USSD, bank transfer, etc.
 Receive and handle the payment response.
 
@@ -131,20 +124,20 @@ let launchButton = UIButton(type: .system)
    let config = FlutterwaveConfig.sharedConfig()
    config.paymentOptionsToExclude = []
    config.currencyCode = "NGN" // This is the specified currency to charge in.
-   config.email = "user@flw.com" // This is the email address of the customer
-   config.isStaging = false // Toggle this for staging and live environment
-   config.phoneNumber = "077883***1" //Phone number
-   config.transcationRef = "IOS TEXT" // This is a unique reference, unique to the particular transaction being carried out. It is generated when it is not provided by the merchant for every transaction.
+   config.email = "user@flw.com" // This is the email address of the customer.
+   config.isStaging = false // Set this to true to collect payment in the test environment and false for the live environment.
+   config.phoneNumber = "077883***1" //This is the customer's Phone number.
+   config.transcationRef = "IOS TEXT" // This is a unique reference, specific to the particular transaction being carried out. It is automatically generated for each transaction when not provided by the merchant. 
    config.firstName = "Yemi" // This is the customers first name.
    config.lastName = "Desola" //This is the customers last name.
-   config.meta = [["metaname":"sdk", "metavalue":"ios"]] //This is used to include additional payment information
+   config.meta = [["metaname":"sdk", "metavalue":"ios"]] //This is used to include additional payment information.
    config.narration = "simplifying payments for endless possibilities"
-   config.publicKey = "[PUB_KEY]" //Public key
-   config.encryptionKey = "[ENCRYPTION_KEY]" //Encryption key
-   config.isPreAuth = false  // This should be set to true for preauthorize card transactions
+   config.publicKey = "[PUB_KEY]" //Your Public key.
+   config.encryptionKey = "[ENCRYPTION_KEY]" //Your Encryption key.
+   config.isPreAuth = false  // Set to true for preauthorized card transactions.
    let controller = FlutterwavePayViewController()
    let nav = UINavigationController(rootViewController: controller)
-   controller.amount = "[]" // This is the amount to be charged.
+   controller.amount = "[]" // This is the amount to be charged from the customer.
    controller.delegate = self
    self.present(nav, animated: true)
 }
@@ -167,19 +160,19 @@ let launchButton = UIButton(type: .system)
 
 ## Testing
 
-Thoroughly test the integration with various payment scenarios to ensure a smooth user experience. Flutterwave provides testing helpers that allow you to simulate different payment scenarios.
+Thoroughly test the integration with various payment scenarios to ensure a smooth user experience. Flutterwave provides testing helpers to simulate different payment scenarios.
 
 For your convenience, here are the testing helpers available:
 
-- **Card Testing**: Use the card details provided in the [Flutterwave documentation](https://developer.flutterwave.com/docs/integration-guides/testing-helpers) to simulate successful and failed card transactions.
+- **Card Testing**: Use the card details provided in our [documentation](https://developer.flutterwave.com/v3.0.0/docs/testing#cards) to simulate both successful and failed card transactions.
 
-- **Mobile Money Testing**: Simulate mobile money transactions using the provided testing details. Refer to the [Flutterwave documentation](https://developer.flutterwave.com/docs/integration-guides/testing-helpers) for more information.
+- **Mobile Money Testing**: Simulate mobile money transactions using the provided testing details. Refer to our   [documentation](https://developer.flutterwave.com/v3.0.0/docs/testing#mobile-money) for more information.
 
-- **Bank Transfer Testing**: Test bank transfer scenarios with the testing account details available in the [Flutterwave documentation](https://developer.flutterwave.com/docs/integration-guides/testing-helpers).
+- **Bank Transfer Testing**: Test bank transfer scenarios with the test account details provided in our [documentation](https://developer.flutterwave.com/v3.0.0/docs/testing#testing-transfers).
 
-- **USSD Testing**: You can also test USSD transactions using the provided USSD codes and instructions from the [Flutterwave documentation](https://developer.flutterwave.com/docs/integration-guides/testing-helpers).
+- **USSD Testing**: In the test environment, USSD transactions will automatically be paid (transition to "successful") after a few seconds. Learn more about how USSD payments work [here](https://developer.flutterwave.com/v3.0.0/docs/ussd).
 
-These testing helpers help you ensure that your integration handles various payment scenarios effectively before deploying your application to a production environment. It's recommended to thoroughly test your integration with these testing details to provide a reliable payment experience to your users.
+These testing helpers help ensure that your integration effectively handles various payment scenarios before deploying your application to a production(live) environment. It is recommended to thoroughly test your integration using these testing details to provide a reliable payment experience for your customer's.
 
 
 ## Handling Transactions
@@ -189,27 +182,27 @@ When handling transactions using the Flutterwave iOS SDK, you can implement call
 
 // MARK: - Transaction Handling
     
-    // This method is called when a transaction is successful
+    // This method is called when a transaction is successful.
     func transactionSuccessful(flwRef: String?, responseData: FlutterwaveDataResponse?) {
         print("DATA Returned \(responseData?.flwRef ?? "Failed to return data")")
-        // You can add additional logic here to handle a successful transaction
+        // You can add additional logic here to handle a successful transaction.
     }
     
-    // This method is called when a transaction fails
+    // This method is called when a transaction fails.
     func transactionFailed(flwRef: String?, responseData: FlutterwaveDataResponse?) {
         print("Failed to return data with FlwRef \(flwRef.orEmpty())")
-        // You can add additional logic here to handle a failed transaction
+        // You can add additional logic here to handle a failed transaction.
     }
 ```
 
 ## Handling Error Messages
-When handling errors, you can extract error messages from the response to provide meaningful feedback to users.
+When handling errors, extract error messages from the response to provide meaningful feedback to customer's.
 
 ## Testing
-Thoroughly test the integration with various payment scenarios to ensure a smooth user experience.
+Thoroughly test the integration with various payment scenarios to ensure a smooth customer experience.
 
 ## Debugging Errors
-If you encounter issues, refer to the SDK documentation for troubleshooting guidance.
+If you encounter issues, refer to the [SDK documentation](https://developer.flutterwave.com/v3.0.0/docs/common-errors) for troubleshooting guidance.
 
 ## Support
 If you need further help with this SDK, feel free to get in touch with our Developer Experience (DX) team via [email](mailto:developers@flutterwavego.com) or join the conversation on [Slack](https://bit.ly/34Vkzcg).
