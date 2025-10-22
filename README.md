@@ -39,7 +39,7 @@ To use the Flutterwave iOS SDK, you must have the following:
 
 - iOS version 11.0 or newer.
 - Swift version 5.3 or newer.
-- CocoaPods or Carthage for managing dependency.
+- CocoaPods or Carthage for managing dependencies.
 
 ## Installation
 
@@ -50,7 +50,7 @@ To install the Flutterwave iOS SDK, you have two options: you can use either Coc
        ```
        pod 'FlutterwaveSDK'
        ```
-    2. In your terminal run the command:
+    2. In your terminal, run the command:
        ```
        pod install
        ```
@@ -83,18 +83,18 @@ config.encryptionKey = "[ENCRYPTION_KEY]" //Your Encryption Key.
 The SDK provides the following features:
 
 ### Collections: 
-Support for various payment methods including Cards, Accounts, Mobile Money, Bank Transfers, USSD, and Barter.
+Support for various payment methods, including Cards, Accounts, Mobile Money, Bank Transfers, USSD, and Barter.
 
 ### Recurring Payments: 
 Tokenization and Subscription functionalities are also provided.
 
 # Use Case
-Imagine you have an e-commerce app. You can utilize the Flutterwave iOS SDK to manage the checkout process efficiently.
+Imagine you have an e-commerce app. You can utilize the Flutterwave iOS SDK to manage the checkout process effectively.
 
 # Flow
 Collect payment details from the customer.
 Initialize the Flutterwave SDK with the required parameters.
-Process the payment using various payment methods such as cards, mobile money, USSD, bank transfer, etc.
+Process payments using various payment methods such as cards, mobile money, USSD, bank transfer, etc.
 Receive and handle the payment response.
 
 ## Sample Code
@@ -127,10 +127,10 @@ let launchButton = UIButton(type: .system)
    config.email = "user@flw.com" // This is the email address of the customer.
    config.isStaging = false // Set this to true to collect payment in the test environment and false for the live environment.
    config.phoneNumber = "077883***1" //This is the customer's Phone number.
-   config.transcationRef = "IOS TEXT" // This is a unique reference, specific to the particular transaction being carried out. It is automatically generated for each transaction when not provided by the merchant. 
+   config. transactionRef = "IOS TEXT" // This is a unique reference, specific to the particular transaction being carried out. It is automatically generated for each transaction when not provided by the merchant. 
    config.firstName = "Yemi" // This is the customers first name.
    config.lastName = "Desola" //This is the customers last name.
-   config.meta = [["metaname":"sdk", "metavalue":"ios"]] //This is used to include additional payment information.
+   config.meta = [["metaname": "sdk", "metavalue": "ios"]] //This is used to include additional payment information.
    config.narration = "simplifying payments for endless possibilities"
    config.publicKey = "[PUB_KEY]" //Your Public key.
    config.encryptionKey = "[ENCRYPTION_KEY]" //Your Encryption key.
@@ -160,7 +160,7 @@ let launchButton = UIButton(type: .system)
 
 ## Testing
 
-Thoroughly test the integration with various payment scenarios to ensure a smooth user experience. Flutterwave provides testing helpers to simulate different payment scenarios.
+You should always test the integration with various payment scenarios to ensure a smooth customer experience. Flutterwave provides testing helpers to simulate different payment scenarios.
 
 For your convenience, here are the testing helpers available:
 
@@ -172,7 +172,7 @@ For your convenience, here are the testing helpers available:
 
 - **USSD Testing**: In the test environment, USSD transactions will automatically be paid (transition to "successful") after a few seconds. Learn more about how USSD payments work [here](https://developer.flutterwave.com/v3.0.0/docs/ussd).
 
-These testing helpers help ensure that your integration effectively handles various payment scenarios before deploying your application to a production(live) environment. It is recommended to thoroughly test your integration using these testing details to provide a reliable payment experience for your customer's.
+These testing helpers help ensure that your integration effectively handles various payment scenarios before deploying your application to a production(live) environment. It's recommended to thoroughly test your integration using these testing details to provide a reliable payment experience for your customers.
 
 
 ## Handling Transactions
@@ -196,20 +196,20 @@ When handling transactions using the Flutterwave iOS SDK, you can implement call
 ```
 
 ## Handling Error Messages
-When handling errors, extract error messages from the response to provide meaningful feedback to customer's.
+When handling errors, extract error messages from the response to provide meaningful feedback to customers.
 
 ## Testing
-Thoroughly test the integration with various payment scenarios to ensure a smooth customer experience.
+You should thoroughly test the integration with various payment scenarios to ensure a smooth customer experience.
 
 ## Debugging Errors
 If you encounter issues, refer to the [SDK documentation](https://developer.flutterwave.com/v3.0.0/docs/common-errors) for troubleshooting guidance.
 
 ## Support
-If you need further help with this SDK, feel free to get in touch with our Developer Experience (DX) team via [email](mailto:developers@flutterwavego.com) or join the conversation on [Slack](https://bit.ly/34Vkzcg).
+If you need any help with this SDK, feel free to reach out to our Developer Experience (DX) team via [email](mailto:developers@flutterwavego.com) or join the conversation on [Slack](https://bit.ly/34Vkzcg).
 
 You can also follow us [@FlutterwaveEng](https://twitter.com/FlutterwaveEng) to stay updated and share your thoughts with us. 😊
 
-**Please note that merchant must be PCI-DSS compliant to be able to charge cards on FlutterwaveSDK.**
+**Please note that the merchant must be PCI-DSS compliant to be able to charge cards on FlutterwaveSDK**
 
 ## Contribution Guidelines
 We welcome contributions to enhance the Flutterwave iOS SDK. Please review our contribution guidelines before submitting pull requests.
