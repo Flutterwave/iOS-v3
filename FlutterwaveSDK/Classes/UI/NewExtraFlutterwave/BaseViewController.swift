@@ -43,9 +43,9 @@ public class BaseViewController:UITableViewController{
         baseViewModel.isLoading.subscribe(onNext: { isLoading in
             DispatchQueue.main.async {
                 if(isLoading){
-                    LoadingHUD.shared().show()
+                    LoadingHUD.shared.show()
                 }else{
-                    LoadingHUD.shared().hide()
+                    LoadingHUD.shared.hide()
                 }
             }
             
