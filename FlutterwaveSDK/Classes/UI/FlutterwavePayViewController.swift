@@ -620,7 +620,7 @@ public class FlutterwavePayViewController: BaseViewController {
         
         let closeButton = UIButton(type: .system)
         closeButton.tintColor = .darkGray
-        closeButton.setImage(UIImage(named: "rave_close", in: Bundle.getResourcesBundle(), compatibleWith: nil), for: .normal)
+        closeButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         closeButton.titleLabel?.font  = UIFont.systemFont(ofSize: 17, weight: .bold)
         closeButton.titleLabel?.textAlignment = .center
         closeButton.frame = CGRect(x: 0, y:0, width: 40, height: 40)
@@ -629,6 +629,9 @@ public class FlutterwavePayViewController: BaseViewController {
         
         self.tableView.backgroundColor = UIColor(hex: "#F2F2F2")
         self.tableView.tableFooterView = UIView(frame: .zero)
+        self.tableView.estimatedSectionHeaderHeight = 0
+        self.tableView.estimatedSectionFooterHeight = 0
+        self.tableView.estimatedRowHeight = 0
         configureView()
         configureDebitCardView()
         configureGBPView()
@@ -710,7 +713,7 @@ public class FlutterwavePayViewController: BaseViewController {
         
         //MARK CVV texfield button action
         self.debitCardView.questionButton.rx.tap.subscribe(onNext: {
-            //                        self.showToast(message: "Your Toast Message")
+            //                        self.showFWToast(message: "Your Toast Message")
         }).disposed(by: disposableBag)
         
         
@@ -971,7 +974,7 @@ public class FlutterwavePayViewController: BaseViewController {
     @objc func chargeGBPAccountFlow(){
         self.view.endEditing(true)
         if FlutterwaveConfig.sharedConfig().currencyCode == .some("GBP"){
-            LoadingHUD.shared().show()
+            LoadingHUD.shared.show()
             flutterwaveUKAccountClient.amount = self.amount
             flutterwaveUKAccountClient.accountNumber = "00000"
             flutterwaveUKAccountClient.bankCode = "093"
@@ -985,7 +988,7 @@ public class FlutterwavePayViewController: BaseViewController {
     @objc func completeGBPAccountFlow(){
         self.view.endEditing(true)
         if FlutterwaveConfig.sharedConfig().currencyCode == .some("GBP"){
-            LoadingHUD.shared().show()
+            LoadingHUD.shared.show()
             //            raveUKAccountClient.queryTransaction(txRef: raveUKAccountClient.txRef)
         }
     }
@@ -1155,7 +1158,7 @@ public class FlutterwavePayViewController: BaseViewController {
     func chargeUSAccountFlow(){
         self.view.endEditing(true)
         if FlutterwaveConfig.sharedConfig().country == .some("US"){
-            LoadingHUD.shared().show()
+            LoadingHUD.shared.show()
             flutterwaveAccountClient.isUSBankAccount = true
             flutterwaveAccountClient.amount = self.amount
             flutterwaveAccountClient.phoneNumber = FlutterwaveConfig.sharedConfig().phoneNumber
@@ -1167,7 +1170,7 @@ public class FlutterwavePayViewController: BaseViewController {
     func chargeSAAccountFlow(){
         self.view.endEditing(true)
         if FlutterwaveConfig.sharedConfig().country == .some("ZA"){
-            LoadingHUD.shared().show()
+            LoadingHUD.shared.show()
             flutterwaveAccountClient.amount = self.amount
             flutterwaveAccountClient.accountNumber = "00000"
             flutterwaveAccountClient.bankCode = "093"
@@ -1295,6 +1298,9 @@ public class FlutterwavePayViewController: BaseViewController {
         }
     }
     override public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // If this section's header height is 0, return nil explicitly
+        let headerHeight = self.tableView(tableView, heightForHeaderInSection: section)
+        guard headerHeight > 0 else { return nil }
         
         switch section {
         case 0:
@@ -1458,6 +1464,18 @@ public class FlutterwavePayViewController: BaseViewController {
         
     }
     
+    override public func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        // 0 for hidden sections; use leastNormalMagnitude or a small value for visible ones if needed
+        let headerHeight = self.tableView(tableView, heightForHeaderInSection: section)
+        return headerHeight == 0 ? 0 : .leastNormalMagnitude
+    }
+
+    override public func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        // Return nil for hidden sections
+        let headerHeight = self.tableView(tableView, heightForHeaderInSection: section)
+        return headerHeight == 0 ? nil : UIView(frame: .zero)
+    }
+    
     func getHeader()-> FlutterwaveHeaderView{
         let header = FlutterwaveHeaderView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 100))
         header.backgroundColor = UIColor(hex: "#FBEED8")
@@ -1531,7 +1549,7 @@ public class FlutterwavePayViewController: BaseViewController {
     func saveCardCallbacks(){
         if let _ = FlutterwaveConfig.sharedConfig().publicKey{
             if let deviceNumber = FlutterwaveConfig.sharedConfig().phoneNumber, deviceNumber != ""{
-              //  LoadingHUD.shared().show()
+              //  LoadingHUD.shared.show()
                 CardViewModel.sharedViewModel.fetchCard()
             }
         }
@@ -1550,14 +1568,14 @@ public class FlutterwavePayViewController: BaseViewController {
 //                return
 //            }
 //            DispatchQueue.main.async {
-//                LoadingHUD.shared().hide()
+//                LoadingHUD.shared.hide()
 //                strongSelf.showOTP(message: message ?? "Enter the OTP sent to your mobile phone and email address to continue", flwRef: "", otpType: .savedCard)
 //            }
 //        }
 //        flutterwaveCardClient.sendOTPError = {(message) in
 //
 //            DispatchQueue.main.async {
-//                LoadingHUD.shared().hide()
+//                LoadingHUD.shared.hide()
 //                showSnackBarWithMessage(msg: message ?? "An error occured while sending OTP")
 //            }
 //        }
@@ -1584,7 +1602,7 @@ public class FlutterwavePayViewController: BaseViewController {
                 return
             }
             DispatchQueue.main.async {
-                LoadingHUD.shared().hide()
+                LoadingHUD.shared.hide()
                 strongSelf.debitCardView.isHidden = false
                 strongSelf.saveCardContainer.isHidden  = true
             }
@@ -1595,7 +1613,7 @@ public class FlutterwavePayViewController: BaseViewController {
 //                return
 //            }
 //            DispatchQueue.main.async {
-//                LoadingHUD.shared().hide()
+//                LoadingHUD.shared.hide()
 //                if let count = saveCards?.count, count > 0 {
 //                    strongSelf.saveCardContainer.isHidden = false
 //                    strongSelf.debitCardView.isHidden = true
@@ -1611,7 +1629,7 @@ public class FlutterwavePayViewController: BaseViewController {
 //                return
 //            }
 //            DispatchQueue.main.async {
-//                LoadingHUD.shared().hide()
+//                LoadingHUD.shared.hide()
 //                strongSelf.debitCardView.isHidden = false
 //                strongSelf.saveCardContainer.isHidden  = true
 //            }
@@ -1629,27 +1647,27 @@ public class FlutterwavePayViewController: BaseViewController {
         }
         
         flutterwaveUKAccountClient.chargeSuccess = {[weak self](flwRef,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.delegate?.tranasctionSuccessful(flwRef: flwRef,responseData: data)
             self?.dismiss(animated: true)
         }
         
         flutterwaveUKAccountClient.chargeGBPOTPAuth =  {[weak self](flwRef, reference,message) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showGBPBankDetails(reference)
         }
         
         flutterwaveUKAccountClient.redoChargeOTPAuth =  {[weak self](flwRef, message) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .bank)
         }
         
         flutterwaveUKAccountClient.chargeWebAuth = {[weak self](flwRef, authURL) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showWebView(url: authURL,ref:flwRef)
         }
         flutterwaveUKAccountClient.validateError = {[weak self](message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             //Still show success
             if let _data  = data{
                 let flwref = _data.flwRef
@@ -1664,7 +1682,7 @@ public class FlutterwavePayViewController: BaseViewController {
             self?.dismiss(animated: true)
         }
         flutterwaveUKAccountClient.error = {(message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             DispatchQueue.main.async {
                 if let msg = message{
                     if msg.containsIgnoringCase(find: "Timed Out"){
@@ -1727,27 +1745,27 @@ public class FlutterwavePayViewController: BaseViewController {
         }
         
         flutterwaveAccountClient.chargeSuccess = {[weak self](flwRef,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.delegate?.tranasctionSuccessful(flwRef: flwRef,responseData: data)
             self?.dismiss(animated: true)
         }
         
         flutterwaveAccountClient.chargeOTPAuth =  {[weak self](flwRef, message) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .bank)
         }
         
         flutterwaveAccountClient.redoChargeOTPAuth =  {[weak self](flwRef, message) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .bank)
         }
         
         flutterwaveAccountClient.chargeWebAuth = {[weak self](flwRef, authURL) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showWebView(url: authURL,ref:flwRef)
         }
         flutterwaveAccountClient.validateError = {[weak self](message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             
             //Still show success
             if let _data  = data{
@@ -1763,7 +1781,7 @@ public class FlutterwavePayViewController: BaseViewController {
             self?.dismiss(animated: true)
         }
         flutterwaveAccountClient.error = {(message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             DispatchQueue.main.async {
                 if let msg = message{
                     if msg.containsIgnoringCase(find: "Timed Out"){
@@ -1781,7 +1799,7 @@ public class FlutterwavePayViewController: BaseViewController {
         flutterwaveCardClient.transactionReference = FlutterwaveConfig.sharedConfig().transcationRef
         
         flutterwaveCardClient.chargeSuccess = {[weak self](flwRef,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.delegate?.tranasctionSuccessful(flwRef: flwRef,responseData: data)
             self?.dismiss(animated: true)
         }
@@ -1794,7 +1812,7 @@ public class FlutterwavePayViewController: BaseViewController {
         }
         
         flutterwaveCardClient.chargeSuggestedAuth = {[weak self](authModel, data, authURL) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             switch authModel {
             case .AVS_VBVSECURECODE:
                 self?.showBillingAddress()
@@ -1817,7 +1835,7 @@ public class FlutterwavePayViewController: BaseViewController {
         }
         
         flutterwaveCardClient.error = {(message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             DispatchQueue.main.async {
                 if let msg = message{
                     if msg.containsIgnoringCase(find: "timeout"){
@@ -1830,16 +1848,16 @@ public class FlutterwavePayViewController: BaseViewController {
         }
         
         flutterwaveCardClient.chargeOTPAuth = {[weak self](flwRef, message) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showOTP(message: message, flwRef: flwRef, otpType: .card)
         }
         
         flutterwaveCardClient.chargeWebAuth = {[weak self](flwRef, authURL) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             self?.showWebView(url: authURL,ref:flwRef)
         }
         flutterwaveCardClient.validateError = {[weak self](message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             if let _data  = data{
                 let flwref = _data.flwRef.orEmpty()
                 self?.delegate?.tranasctionSuccessful(flwRef: flwref,responseData: data)
@@ -1866,7 +1884,7 @@ public class FlutterwavePayViewController: BaseViewController {
         
         
         flutterwaveMpesaClient.chargePending = {[weak self] (title,message) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             DispatchQueue.main.async {
                 guard let strongSelf = self else{ return}
                 self?.showMpesaPending(mesage: message ?? "")
@@ -1879,7 +1897,7 @@ public class FlutterwavePayViewController: BaseViewController {
             self?.dismiss(animated: true)
         }
         flutterwaveMpesaClient.error = {[weak self](message,data) in
-            LoadingHUD.shared().hide()
+            LoadingHUD.shared.hide()
             DispatchQueue.main.async {
                 if let msg = message{
                     if msg.containsIgnoringCase(find: "timeout"){

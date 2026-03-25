@@ -17,7 +17,7 @@ extension FlutterwavePayViewController : UITextFieldDelegate,CardSelect,UIPicker
     func cardSelected(card: SavedCard?) {
         flutterwaveCardClient.selectedCard = card
         if let card =  flutterwaveCardClient.selectedCard{
-            //LoadingHUD.shared().show()
+            //LoadingHUD.shared.show()
             CardViewModel.sharedViewModel.sendCardOtp(cardHash: card.cardHash ?? "")
            // flutterwaveCardClient.sendOTP(card: card)
         }
@@ -296,7 +296,7 @@ extension FlutterwavePayViewController : UITextFieldDelegate,CardSelect,UIPicker
         guard let otp = accountOtpContentContainer.otpTextField.text, otp != ""  else {
             return
         }
-        LoadingHUD.shared().show()
+        LoadingHUD.shared.show()
         flutterwaveAccountClient.otp = otp
         //        raveAccountClient.validateAccountOTP()
     }
@@ -319,7 +319,7 @@ extension FlutterwavePayViewController : UITextFieldDelegate,CardSelect,UIPicker
         guard let otp = otpContentContainer.otpTextField.text, otp != ""  else {
             return
         }
-       // LoadingHUD.shared().show()
+       // LoadingHUD.shared.show()
         flutterwaveCardClient.otp = otp
         flutterwaveCardClient.isSaveCardCharge = "1"
         flutterwaveCardClient.saveCardPayment = "saved-card"

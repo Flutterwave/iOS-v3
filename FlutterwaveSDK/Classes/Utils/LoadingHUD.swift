@@ -3,109 +3,103 @@
 //  GetBarter
 //
 //  Created by Olusegun Solaja on 04/08/2018.
-//  Copyright © 2018 Olusegun Solaja. All rights reserved.
+//  Updated by SOGApps on 03/24/2026.
+//  Updated for Lottie v4.6.0
 //
 
 import UIKit
 import Lottie
 
 class LoadingHUD: UIView {
-    //let appDelegate = UIApplication.shared.delegate as? AppDelegate
-    var animation:AnimationView!
-    
-    var bgColor: UIColor? = .clear
-    var applyBlur = true
-    var animationFile = "Loader_YW"
-   
-    var blurView:UIVisualEffectView = {
-        let effect = UIBlurEffect(style: UIBlurEffect.Style.dark)
+
+    // MARK: - Properties
+    static let shared = LoadingHUD(frame: UIScreen.main.bounds)
+
+    private var animation: LottieAnimationView?
+    var animationFile: String = "Loader_YW"
+    var bgColor: UIColor = .clear
+    var applyBlur: Bool = true
+
+    private lazy var blurView: UIVisualEffectView = {
+        let effect = UIBlurEffect(style: .dark)
         let effectView = UIVisualEffectView(effect: effect)
         effectView.translatesAutoresizingMaskIntoConstraints = false
         return effectView
     }()
-    
-    
-    class func shared() -> LoadingHUD{
-        struct Static {
-            static let loader = LoadingHUD(frame: (UIScreen.main.bounds))
-            
-        }
-        return Static.loader
-    }
-    
-    
-    
+
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.isHidden = true
         setupUI()
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.isHidden = true
         setupUI()
     }
-    
-    func setupUI(){
-        
-    }
-    
-    func show(){
+
+    private func setupUI() {
         backgroundColor = bgColor
-        if(applyBlur){
-            insertSubview(blurView, at: 0)
-            blurView.leftAnchor.constraint(equalTo:leftAnchor).isActive = true
-            blurView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-            blurView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+    }
+
+    // MARK: - Show HUD
+    func show() {
+        guard let keyWindow = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow }) else { return }
+
+        showInView(view: keyWindow)
+    }
+
+    func showInView(view: UIView) {
+        backgroundColor = bgColor
+
+        if applyBlur {
+            if blurView.superview == nil {
+                insertSubview(blurView, at: 0)
+                NSLayoutConstraint.activate([
+                    blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                    blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                    blurView.topAnchor.constraint(equalTo: topAnchor),
+                    blurView.bottomAnchor.constraint(equalTo: bottomAnchor)
+                ])
+            }
         }
-		
-        
-		animation = AnimationView(name: animationFile, bundle: Bundle.getResourcesBundle() ?? Bundle.main)
+
+        // Remove previous animation if any
+        animation?.removeFromSuperview()
+
+        // Load animation
+        let lottieAnimation = LottieAnimation.named(animationFile, bundle: Bundle.getResourcesBundle() ?? Bundle.main)
+        animation = LottieAnimationView(animation: lottieAnimation)
+        guard let animation = animation else { return }
         animation.loopMode = .loop
         animation.translatesAutoresizingMaskIntoConstraints = false
         addSubview(animation)
-        animation.centerXAnchor.constraint(equalTo:centerXAnchor).isActive = true
-        animation.centerYAnchor.constraint(equalTo:centerYAnchor).isActive = true
-        animation.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        animation.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        
-        self.animation.play()
-        UIApplication.shared.keyWindow?.addSubview(self)
-        isHidden = false
-    }
-    func showInView(view:UIView){
-        backgroundColor = bgColor
-        if(applyBlur){
-            insertSubview(blurView, at: 0)
-            blurView.leftAnchor.constraint(equalTo:leftAnchor).isActive = true
-            blurView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
-            blurView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-            blurView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+
+        NSLayoutConstraint.activate([
+            animation.centerXAnchor.constraint(equalTo: centerXAnchor),
+            animation.centerYAnchor.constraint(equalTo: centerYAnchor),
+            animation.widthAnchor.constraint(equalToConstant: 80),
+            animation.heightAnchor.constraint(equalToConstant: 80)
+        ])
+
+        animation.play()
+
+        if superview == nil {
+            view.addSubview(self)
         }
-        
-        animation = AnimationView(name: animationFile)
-        animation.loopMode = .loop
-        animation.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(animation)
-        animation.centerXAnchor.constraint(equalTo:centerXAnchor).isActive = true
-        animation.centerYAnchor.constraint(equalTo:centerYAnchor).isActive = true
-        animation.widthAnchor.constraint(equalToConstant: 80).isActive = true
-        animation.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        
-        self.animation.play()
-        view.addSubview(self)
-        
         isHidden = false
-       
     }
-    
-    func hide(){
-//        animation.stop()
+
+    // MARK: - Hide HUD
+    func hide() {
+        animation?.stop()
+        animation?.removeFromSuperview()
         isHidden = true
         removeFromSuperview()
     }
-    
-    
 }
-
-
